@@ -141,7 +141,7 @@ function DrumMachine() {
   // The controls will be made using .map
   const controlKeys = ['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C'];
 
-  const kick = new Howl({
+  /* const kick = new Howl({
     src: [Kick],
   });
   const snare = new Howl({
@@ -167,7 +167,64 @@ function DrumMachine() {
   });
   const fx = new Howl({
     src: [FX],
-  });
+  }); */
+
+  const drumSounds = [
+    {
+      name: 'drumpad0',
+      soundName: 'kick',
+      sound: '',
+      display: 'Kick',
+    },
+    {
+      name: 'drumpad1',
+      soundName: 'snare',
+      sound: '',
+      display: 'Snare',
+    },
+    {
+      name: 'drumpad2',
+      soundName: 'hhClosed',
+      sound: '',
+      display: 'Hi-Hat Closed',
+    },
+    {
+      name: 'drumpad3',
+      soundName: 'brass1',
+      sound: '',
+      display: 'Brass 1',
+    },
+    {
+      name: 'drumpad4',
+      soundName: 'brass2',
+      sound: '',
+      display: 'Brass 2',
+    },
+    {
+      name: 'drumpad5',
+      soundName: 'melody1',
+      sound: '',
+      display: 'Melody 1',
+    },
+    {
+      name: 'drumpad6',
+      soundName: 'melody2',
+      sound: '',
+      display: 'Melody 2',
+    },
+    {
+      name: 'drumpad7',
+      soundName: 'glock',
+      sound: '',
+      display: 'Glock',
+    },
+    {
+      name: 'drumpad8',
+      soundName: 'fx',
+      sound: '',
+      display: 'FX',
+    },
+  ];
 
   const setDisplay = control => {
     setDisplayText(control);
@@ -226,6 +283,59 @@ function DrumMachine() {
     }
     setDisplay(text);
   };
+  /* const playSound = control => {
+    let text = '';
+    switch (control) {
+      case 'drumpad0':
+        melody1.stop();
+        melody2.stop();
+        melody1.play();
+        text = 'Melody 1';
+        break;
+      case 'drumpad1':
+        melody1.stop();
+        melody2.stop();
+        melody2.play();
+        text = 'Melody 2';
+        break;
+      case 'drumpad2':
+        snare.play();
+        text = 'Snare';
+        break;
+      case 'drumpad3':
+        brass1.stop();
+        brass2.stop();
+        brass1.play();
+        text = 'Brass 1';
+        break;
+      case 'drumpad4':
+        brass1.stop();
+        brass2.stop();
+        brass2.play();
+        text = 'Brass 2';
+        break;
+      case 'drumpad5':
+        hhClosed.play();
+        text = 'HiHat Closed';
+        break;
+      case 'drumpad6':
+        glock.stop();
+        glock.play();
+        text = 'Glockenspiel';
+        break;
+      case 'drumpad7':
+        fx.stop();
+        fx.play();
+        text = 'FX';
+        break;
+      case 'drumpad8':
+        kick.play();
+        text = 'Kick';
+        break;
+      default:
+    }
+    setDisplay(text);
+  }; */
 
   const handleClick = e => {
     const control = e.currentTarget.id;
@@ -299,7 +409,6 @@ function DrumMachine() {
               C
             </DrumButton>
           </div>
-          {/* <div className={classes.actionsContainer}>Kick Sample</div> */}
         </Paper>
       </Box>
     </Container>
