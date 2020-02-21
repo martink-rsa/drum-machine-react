@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { Howl } from 'howler';
+import Loading from '../Loading/Loading';
 import Display from '../Display/Display';
 import Kick from '../../Assets/Sounds/kick.wav';
 import Snare from '../../Assets/Sounds/snare.wav';
@@ -17,32 +18,6 @@ import Melody2 from '../../Assets/Sounds/melody2.wav';
 import Glock from '../../Assets/Sounds/glock.wav';
 // import HHOpen from '../../Assets/Sounds/hh-open.wav';
 
-/*
-  REWRITE AND REFACTORING INFO:
-  The code needs a significant rewrite and refactor. It was originally built to match
-    the user stories of the freeCodeCamp project however this has led to
-    code that is not efficient and very redundant.
-
-  There should only be one source for each sound, such as an object, that contains
-  the sound as well as information regarding the sound. This information is hat
-  will be used to render in the sound trigger display.
-
-  The main point of this is that a sound can easily be loaded into a drum pad
-  and no other changes need to be made, such as a hard coded display for that
-  sound.
-
-  Care must be taken not to include everything in the button of a sound as the
-  keypress trigger event would not have access to this information.
-
-  Instead, attempt to have both the keypress and button trigger a single source
-  for a sound.
-
-  FURTHER INFO:
-
-  1. Generate and display the buttons using .map.
-
-
-*/
 const useStyles = makeStyles(() => ({
   root: {
     padding: 0,
@@ -136,92 +111,88 @@ function DrumMachine() {
   const classes = useStyles();
   const [displayText, setDisplayText] = useState('');
   const [eventLoaded, setEventLoaded] = useState(false);
+  const [soundMain, setSoundMain] = useState({
+    soundsLoaded: false,
+    soundBank: [],
+  });
+
+  const [SBTest, setSBTest] = useState([]);
   // Preplanning for dynamic generation of controls. These letters will be used
   //    for the letters that appear on the controls.
   // The controls will be made using .map
   const controlKeys = ['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C'];
 
-  /* const kick = new Howl({
-    src: [Kick],
-  });
-  const snare = new Howl({
-    src: [Snare],
-  });
-  const hhClosed = new Howl({
-    src: [HHClosed],
-  });
-  const brass1 = new Howl({
-    src: [Brass1],
-  });
-  const brass2 = new Howl({
-    src: [Brass2],
-  });
-  const melody1 = new Howl({
-    src: [Melody1],
-  });
-  const melody2 = new Howl({
-    src: [Melody2],
-  });
-  const glock = new Howl({
-    src: [Glock],
-  });
-  const fx = new Howl({
-    src: [FX],
-  }); */
-
   const drumSounds = [
     {
       name: 'drumpad0',
       soundName: 'kick',
-      sound: '',
+      sound: new Howl({
+        src: [Kick],
+      }),
       display: 'Kick',
     },
     {
       name: 'drumpad1',
       soundName: 'snare',
-      sound: '',
+      sound: new Howl({
+        src: [Snare],
+      }),
       display: 'Snare',
     },
     {
       name: 'drumpad2',
       soundName: 'hhClosed',
-      sound: '',
+      sound: new Howl({
+        src: [HHClosed],
+      }),
       display: 'Hi-Hat Closed',
     },
     {
       name: 'drumpad3',
       soundName: 'brass1',
-      sound: '',
+      sound: new Howl({
+        src: [Brass1],
+      }),
       display: 'Brass 1',
     },
     {
       name: 'drumpad4',
       soundName: 'brass2',
-      sound: '',
+      sound: new Howl({
+        src: [Brass2],
+      }),
       display: 'Brass 2',
     },
     {
       name: 'drumpad5',
       soundName: 'melody1',
-      sound: '',
+      sound: new Howl({
+        src: [Melody1],
+      }),
       display: 'Melody 1',
     },
     {
       name: 'drumpad6',
       soundName: 'melody2',
-      sound: '',
+      sound: new Howl({
+        src: [Melody2],
+      }),
       display: 'Melody 2',
     },
     {
       name: 'drumpad7',
       soundName: 'glock',
-      sound: '',
+      sound: new Howl({
+        src: [Glock],
+      }),
       display: 'Glock',
     },
     {
       name: 'drumpad8',
       soundName: 'fx',
-      sound: '',
+      sound: new Howl({
+        src: [FX],
+      }),
       display: 'FX',
     },
   ];
@@ -230,140 +201,41 @@ function DrumMachine() {
     setDisplayText(control);
   };
 
-  const playSound = control => {
+  async function playSound(soundIndex) {
     let text = '';
-    switch (control) {
-      case 'drumpad0':
-        melody1.stop();
-        melody2.stop();
-        melody1.play();
-        text = 'Melody 1';
-        break;
-      case 'drumpad1':
-        melody1.stop();
-        melody2.stop();
-        melody2.play();
-        text = 'Melody 2';
-        break;
-      case 'drumpad2':
-        snare.play();
-        text = 'Snare';
-        break;
-      case 'drumpad3':
-        brass1.stop();
-        brass2.stop();
-        brass1.play();
-        text = 'Brass 1';
-        break;
-      case 'drumpad4':
-        brass1.stop();
-        brass2.stop();
-        brass2.play();
-        text = 'Brass 2';
-        break;
-      case 'drumpad5':
-        hhClosed.play();
-        text = 'HiHat Closed';
-        break;
-      case 'drumpad6':
-        glock.stop();
-        glock.play();
-        text = 'Glockenspiel';
-        break;
-      case 'drumpad7':
-        fx.stop();
-        fx.play();
-        text = 'FX';
-        break;
-      case 'drumpad8':
-        kick.play();
-        text = 'Kick';
-        break;
-      default:
-    }
-    setDisplay(text);
-  };
-  /* const playSound = control => {
-    let text = '';
-    switch (control) {
-      case 'drumpad0':
-        melody1.stop();
-        melody2.stop();
-        melody1.play();
-        text = 'Melody 1';
-        break;
-      case 'drumpad1':
-        melody1.stop();
-        melody2.stop();
-        melody2.play();
-        text = 'Melody 2';
-        break;
-      case 'drumpad2':
-        snare.play();
-        text = 'Snare';
-        break;
-      case 'drumpad3':
-        brass1.stop();
-        brass2.stop();
-        brass1.play();
-        text = 'Brass 1';
-        break;
-      case 'drumpad4':
-        brass1.stop();
-        brass2.stop();
-        brass2.play();
-        text = 'Brass 2';
-        break;
-      case 'drumpad5':
-        hhClosed.play();
-        text = 'HiHat Closed';
-        break;
-      case 'drumpad6':
-        glock.stop();
-        glock.play();
-        text = 'Glockenspiel';
-        break;
-      case 'drumpad7':
-        fx.stop();
-        fx.play();
-        text = 'FX';
-        break;
-      case 'drumpad8':
-        kick.play();
-        text = 'Kick';
-        break;
-      default:
-    }
-    setDisplay(text);
-  }; */
+    console.log('PLAY SOUND:');
+    console.log(soundMain);
+    console.log(SBTest);
+  }
 
   const handleClick = e => {
     const control = e.currentTarget.id;
     playSound(control);
   };
 
-  const handleKeyDown = e => {
+  function handleKeyDown(e) {
+    console.log('key down');
     const key = e.key.toUpperCase();
     if (key === 'Q') {
-      playSound('drumpad0');
+      playSound(0);
     } else if (key === 'W') {
-      playSound('drumpad1');
+      playSound(drumSounds[1]);
     } else if (key === 'E') {
-      playSound('drumpad2');
+      playSound(drumSounds[2]);
     } else if (key === 'A') {
-      playSound('drumpad3');
+      playSound(drumSounds[3]);
     } else if (key === 'S') {
-      playSound('drumpad4');
+      playSound(drumSounds[4]);
     } else if (key === 'D') {
-      playSound('drumpad5');
+      playSound(drumSounds[5]);
     } else if (key === 'Z') {
-      playSound('drumpad6');
+      playSound(drumSounds[6]);
     } else if (key === 'X') {
-      playSound('drumpad7');
+      playSound(drumSounds[7]);
     } else if (key === 'C') {
-      playSound('drumpad8');
+      playSound(drumSounds[8]);
     }
-  };
+  }
 
   useEffect(() => {
     if (eventLoaded === false) {
@@ -375,41 +247,80 @@ function DrumMachine() {
     };
   }, [handleKeyDown, eventLoaded]);
 
+  async function importSounds() {
+    if (soundMain.soundsLoaded === false) {
+      try {
+        const sb = await import('../../Static/soundbank1');
+        // console.log(sb.default);
+        /* setSoundMain(prevState => {
+          return {
+            soundBank: sb.default,
+            soundsLoaded: true,
+          };
+        }); */
+        return sb;
+      } catch (error) {
+        console.log(error);
+        console.log('import failed');
+      }
+    }
+  }
+
+  async function getSounds() {
+    const sounds = await import('../../Static/soundbank1');
+    console.log(sounds);
+    return sounds;
+  }
+
+  async function loadSounds(index) {
+    console.log('loading sounds');
+    // importSounds();
+
+    setSBTest(await getSounds());
+    // setSBTest(gs);
+    // console.log(gs);
+  }
+
   return (
     <Container maxWidth="sm">
       <Box my={4} className={classes.mainContainer}>
         <Paper id="drum-machine" className={classes.drumMachineContainer}>
           <Display text={displayText} />
-          <div className={classes.drumPadsContainer}>
-            <DrumButton id="drumpad0" onClick={handleClick}>
-              Q
-            </DrumButton>
-            <DrumButton id="drumpad1" onClick={handleClick}>
-              W
-            </DrumButton>
-            <DrumButton id="drumpad2" onClick={handleClick}>
-              E
-            </DrumButton>
-            <DrumButton id="drumpad3" onClick={handleClick}>
-              A
-            </DrumButton>
-            <DrumButton id="drumpad4" onClick={handleClick}>
-              S
-            </DrumButton>
-            <DrumButton id="drumpad5" onClick={handleClick}>
-              D
-            </DrumButton>
-            <DrumButton id="drumpad6" onClick={handleClick}>
-              Z
-            </DrumButton>
-            <DrumButton id="drumpad7" onClick={handleClick}>
-              X
-            </DrumButton>
-            <DrumButton id="drumpad8" onClick={handleClick}>
-              C
-            </DrumButton>
-          </div>
+          {soundMain.soundsLoaded === false ? (
+            <Loading />
+          ) : (
+            <div className={classes.drumPadsContainer}>
+              <DrumButton id="drumpad0" onClick={handleClick}>
+                Q
+              </DrumButton>
+              <DrumButton id="drumpad1" onClick={handleClick}>
+                W
+              </DrumButton>
+              <DrumButton id="drumpad2" onClick={handleClick}>
+                E
+              </DrumButton>
+              <DrumButton id="drumpad3" onClick={handleClick}>
+                A
+              </DrumButton>
+              <DrumButton id="drumpad4" onClick={handleClick}>
+                S
+              </DrumButton>
+              <DrumButton id="drumpad5" onClick={handleClick}>
+                D
+              </DrumButton>
+              <DrumButton id="drumpad6" onClick={handleClick}>
+                Z
+              </DrumButton>
+              <DrumButton id="drumpad7" onClick={handleClick}>
+                X
+              </DrumButton>
+              <DrumButton id="drumpad8" onClick={handleClick}>
+                C
+              </DrumButton>
+            </div>
+          )}
         </Paper>
+        <Button onClick={() => loadSounds(0)}>Load Sounds 0</Button>
       </Box>
     </Container>
   );
