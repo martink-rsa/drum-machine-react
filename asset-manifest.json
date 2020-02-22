@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/drum-machine-react/static/css/main.8f22b267.chunk.css",
+    "main.js": "/drum-machine-react/static/js/main.7f50530f.chunk.js",
+    "main.js.map": "/drum-machine-react/static/js/main.7f50530f.chunk.js.map",
+    "runtime-main.js": "/drum-machine-react/static/js/runtime-main.d1bfff11.js",
+    "runtime-main.js.map": "/drum-machine-react/static/js/runtime-main.d1bfff11.js.map",
+    "static/js/2.997a8a19.chunk.js": "/drum-machine-react/static/js/2.997a8a19.chunk.js",
+    "static/js/2.997a8a19.chunk.js.map": "/drum-machine-react/static/js/2.997a8a19.chunk.js.map",
+    "static/js/3.d3c12ecb.chunk.js": "/drum-machine-react/static/js/3.d3c12ecb.chunk.js",
+    "static/js/3.d3c12ecb.chunk.js.map": "/drum-machine-react/static/js/3.d3c12ecb.chunk.js.map",
+    "static/js/4.60c3a871.chunk.js": "/drum-machine-react/static/js/4.60c3a871.chunk.js",
+    "static/js/4.60c3a871.chunk.js.map": "/drum-machine-react/static/js/4.60c3a871.chunk.js.map",
+    "index.html": "/drum-machine-react/index.html",
+    "precache-manifest.60822faa19a1165a96b607b8bac1b1f4.js": "/drum-machine-react/precache-manifest.60822faa19a1165a96b607b8bac1b1f4.js",
+    "service-worker.js": "/drum-machine-react/service-worker.js",
+    "static/css/main.8f22b267.chunk.css.map": "/drum-machine-react/static/css/main.8f22b267.chunk.css.map",
+    "static/js/2.997a8a19.chunk.js.LICENSE": "/drum-machine-react/static/js/2.997a8a19.chunk.js.LICENSE",
+    "static/js/4.60c3a871.chunk.js.LICENSE": "/drum-machine-react/static/js/4.60c3a871.chunk.js.LICENSE",
+    "static/media/bass1.mp3": "/drum-machine-react/static/media/bass1.1c360350.mp3",
+    "static/media/chord1.mp3": "/drum-machine-react/static/media/chord1.5457102c.mp3",
+    "static/media/crash.mp3": "/drum-machine-react/static/media/crash.3192e135.mp3",
+    "static/media/fx.mp3": "/drum-machine-react/static/media/fx.6668a5e2.mp3",
+    "static/media/fx2.mp3": "/drum-machine-react/static/media/fx2.99dec641.mp3",
+    "static/media/fx3.mp3": "/drum-machine-react/static/media/fx3.8ea2cec6.mp3",
+    "static/media/hh.wav": "/drum-machine-react/static/media/hh.cb69bb0e.wav",
+    "static/media/kick.wav": "/drum-machine-react/static/media/kick.1bc2fff3.wav",
+    "static/media/snare.wav": "/drum-machine-react/static/media/snare.c1d98abb.wav"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d1bfff11.js",
+    "static/js/2.997a8a19.chunk.js",
+    "static/css/main.8f22b267.chunk.css",
+    "static/js/main.7f50530f.chunk.js"
+  ]
+}
