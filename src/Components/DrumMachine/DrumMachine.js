@@ -99,6 +99,7 @@ function DrumMachine() {
   const classes = useStyles();
 
   const [keyPressValue, setKeyPressValue] = useState('');
+  const [keyPressKeys, setKeyPressKeys] = useState('');
   const [displayText, setDisplayText] = useState('');
   const [soundMain, setSoundMain] = useState({
     soundsLoaded: false,
@@ -137,6 +138,9 @@ function DrumMachine() {
   ];
 
   useEffect(() => {
+    document.addEventListener('keypress', event =>
+      setKeyPressValue(getIndexFromKey(event)),
+    );
     document.addEventListener('keydown', event =>
       setKeyPressValue(getIndexFromKey(event)),
     );
