@@ -16,15 +16,64 @@ const soundBank = [
       src: [Sound0],
     }),
     name: 'Kick',
+    choke: -1,
   },
-  { sound: Sound1, name: 'Snare' },
-  { sound: Sound2, name: 'Hi-Hat Closed' },
-  { sound: Sound3, name: 'FX' },
-  { sound: Sound4, name: 'Brass 1' },
-  { sound: Sound5, name: 'Brass 2' },
-  { sound: Sound6, name: 'Melody 1' },
-  { sound: Sound7, name: 'Melody 2' },
-  { sound: Sound8, name: 'Glockenspiel' },
+  {
+    sound: new Howl({
+      src: [Sound1],
+    }),
+    name: 'Snare',
+    choke: -1,
+  },
+  {
+    sound: new Howl({
+      src: [Sound2],
+    }),
+    name: 'Hi-Hat Closed',
+    choke: -1,
+  },
+  {
+    sound: new Howl({
+      src: [Sound3],
+    }),
+    name: 'FX',
+    choke: -1,
+  },
+  {
+    sound: new Howl({
+      src: [Sound4],
+    }),
+    name: 'Brass 1',
+    choke: 1,
+  },
+  {
+    sound: new Howl({
+      src: [Sound5],
+    }),
+    name: 'Brass 2',
+    choke: 1,
+  },
+  {
+    sound: new Howl({
+      src: [Sound6],
+    }),
+    name: 'Melody 1',
+    choke: 2,
+  },
+  {
+    sound: new Howl({
+      src: [Sound7],
+    }),
+    name: 'Melody 2',
+    choke: 2,
+  },
+  {
+    sound: new Howl({
+      src: [Sound8],
+    }),
+    name: 'Glockenspiel',
+    choke: -1,
+  },
 ];
 
 export default soundBank;
