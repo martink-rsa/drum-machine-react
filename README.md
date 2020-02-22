@@ -1,51 +1,33 @@
-# Project Title
+# Drum Machine
 
-One Paragraph of project description goes here
+A basic drum kit made in React & Material-UI using howler.js
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Clone the repo, then run:
+
+`npm install`
+
+`npm start`
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+No prerequisites are required. 
 
 ## Built With
 
 - [React](https://reactjs.org/) - User interface library
 
+- [Material-UI](https://material-ui.com/) - UI framework
+
+- [Howler.js](https://howlerjs.com/) - Audio library
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
+## Project notes
 
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc
+Encountered difficulties rendering out the drum pads being activated which ended up in a delay in the audio playing. This was subsequently removed but saved as a backup file called `DrumMachineBUTTONHIGHLIGHTS.js.old` in the `DrumMachine` directory. I mostly put this down due to my lack of experience with the useEffect() hook which I've since done quite a fair amount of reading on.
+
+I will be reattempting this project at a later stage once I have managed to find a better solution for handling the triggering of drum pads and adding classes temporarily to the drumpad, preferably without the use of a state.
