@@ -99,7 +99,7 @@ function DrumMachine() {
   const classes = useStyles();
 
   const [keyPressValue, setKeyPressValue] = useState('');
-  const [keyPressKeys, setKeyPressKeys] = useState('');
+  const [keyPressKeys, setKeyPressKeys] = useState([]);
   const [displayText, setDisplayText] = useState('');
   const [soundMain, setSoundMain] = useState({
     soundsLoaded: false,
@@ -107,37 +107,55 @@ function DrumMachine() {
   });
   const controlKeys = ['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C'];
 
-  const btnRef0 = createRef();
-  const btnRef1 = createRef();
-  const btnRef2 = createRef();
-  const btnRef3 = createRef();
-  const btnRef4 = createRef();
-  const btnRef5 = createRef();
-  const btnRef6 = createRef();
-  const btnRef7 = createRef();
-  const btnRef8 = createRef();
-  /*   const btnRef0 = useRef(null);
-  const btnRef1 = useRef(null);
-  const btnRef2 = useRef(null);
-  const btnRef3 = useRef(null);
-  const btnRef4 = useRef(null);
-  const btnRef5 = useRef(null);
-  const btnRef6 = useRef(null);
-  const btnRef7 = useRef(null);
-  const btnRef8 = useRef(null); */
-  const refBtnArray = [
-    btnRef0,
-    btnRef1,
-    btnRef2,
-    btnRef3,
-    btnRef4,
-    btnRef5,
-    btnRef6,
-    btnRef7,
-    btnRef8,
-  ];
+  // 1. On key don, Add button index to array if index is not included
+  // 2. On key up, Remove button index from array
+  // If done correctly, an index can't be added twice since it would be
+  //    removed whenever the key was lifted
 
   useEffect(() => {
+    document.addEventListener('keydown', event =>
+      setKeyPressKeys(prevState => {
+        const keyIndex = getIndexFromEvent(event);
+        const newArr = [...prevState];
+        if (!newArr.includes(keyIndex) && keyIndex !== undefined) {
+          newArr.push(keyIndex);
+        }
+        return newArr;
+      }),
+    );
+  }, []);
+  /* document.addEventListener(
+      'keydown',
+      function(event) {
+        const keyIndex = getIndexFromEvent(event);
+        if (!keyPressKeys.includes(keyIndex))
+          setKeyPressKeys(prevState => {
+            const newArr = [...prevState];
+            newArr.push(keyIndex);
+            return newArr;
+          });
+      }, */
+  /* setKeyPressKeys(prevState => {
+        const newArr = [...prevState];
+        newArr.push(getIndexFromEvent(event));
+        return newArr;
+      }), */
+  /* document.addEventListener('keyup', event =>
+      setKeyPressKeys(prevState => {
+        console.log(event);
+
+        const newArr = [...prevState];
+        const newArr2 = newArr.map(key => {
+          if (key !== 0) {
+            return key;
+          }
+        });
+      }),
+    ); */
+
+  // document.addEventListener('keyup', () => setKeyPressKeys(''));
+
+  /*  useEffect(() => {
     document.addEventListener('keypress', event =>
       setKeyPressValue(getIndexFromKey(event)),
     );
@@ -145,13 +163,15 @@ function DrumMachine() {
       setKeyPressValue(getIndexFromKey(event)),
     );
     document.addEventListener('keyup', () => setKeyPressValue(''));
-  }, []);
+  }, []); */
 
   useEffect(() => {
     if (keyPressValue !== '') {
       handleKeyDown(keyPressValue);
     }
   }, [keyPressValue]);
+
+  useEffect(() => console.log(keyPressKeys));
 
   // Updating the display
   const setDisplay = control => {
@@ -165,7 +185,6 @@ function DrumMachine() {
     setDisplay(soundMain.soundBank[soundIndex].name);
     // Trigger the button classes
     // refBtnArray[soundIndex].classList.add('btn-test');
-    console.log(btnRef0);
   }
 
   // Button clicks
@@ -176,7 +195,7 @@ function DrumMachine() {
 
   // Get index value from key
 
-  function getIndexFromKey(e) {
+  function getIndexFromEvent(e) {
     const key = e.key.toUpperCase();
     let index;
     if (key === 'Q') {
@@ -270,7 +289,6 @@ function DrumMachine() {
                   data-drum-index={index}
                   id={`drumpad${index}`}
                   onClick={handleClick}
-                  ref={refBtnArray[index]}
                   className={keyPressValue === index ? 'btn-test' : null}
                 >
                   {key}
