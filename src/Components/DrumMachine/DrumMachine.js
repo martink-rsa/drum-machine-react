@@ -65,7 +65,7 @@ const DrumButton = withStyles({
     boxShadow: 'none',
     textTransform: 'none',
     fontSize: 16,
-    backgroundColor: '#007bff',
+    backgroundColor: '#7b7b7b',
     borderColor: '#007bff',
     fontFamily: [
       '-apple-system',
@@ -80,17 +80,17 @@ const DrumButton = withStyles({
       '"Segoe UI Symbol"',
     ].join(','),
     '&:hover': {
-      backgroundColor: '#0069d9',
-      borderColor: '#0062cc',
+      backgroundColor: 'rgba(0, 243, 0, .5)',
+      borderColor: 'rgba(0, 243, 0, 0.5)',
       boxShadow: 'none',
     },
     '&:active': {
-      boxShadow: 'none',
-      backgroundColor: '#0062cc',
-      borderColor: '#005cbf',
+      boxShadow: '0px 0px 23px -1px rgba(0, 255, 17, 1)',
+      backgroundColor: 'rgb(0, 243, 0)',
+      borderColor: 'rgb(0, 243, 0)',
     },
     '&:focus': {
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+      boxShadow: '0px 0px 23px -1px rgba(0, 255, 17, 1)',
     },
   },
 })(Button);
@@ -107,71 +107,7 @@ function DrumMachine() {
   });
   const controlKeys = ['Q', 'W', 'E', 'A', 'S', 'D', 'Z', 'X', 'C'];
 
-  // 1. On key don, Add button index to array if index is not included
-  // 2. On key up, Remove button index from array
-  // If done correctly, an index can't be added twice since it would be
-  //    removed whenever the key was lifted
-
-  useEffect(() => {
-    // Adding key index to keydown array, if it hasn't been added
-    document.addEventListener('keydown', event =>
-      setKeyPressKeys(prevState => {
-        const keyIndex = getIndexFromEvent(event);
-        const stateArr = [...prevState];
-        if (!stateArr.includes(keyIndex) && keyIndex !== undefined) {
-          stateArr.push(keyIndex);
-        }
-        return stateArr;
-      }),
-    );
-
-    // Remove key index from keydown array, if it exists
-    document.addEventListener('keyup', event =>
-      setKeyPressKeys(prevState => {
-        const keyIndex = getIndexFromEvent(event);
-        const stateArr = [...prevState];
-        if (keyIndex !== undefined) {
-          const filteredArr = stateArr.filter(key => {
-            if (key !== keyIndex) {
-              console.log(key);
-              return key;
-            }
-          });
-          return filteredArr;
-        }
-        return stateArr;
-      }),
-    );
-  }, []);
-
-  useEffect(() => {
-    if (keyPressValue !== '') {
-      handleKeyDown(keyPressValue);
-    }
-  }, [keyPressValue]);
-
-  useEffect(() => console.log(keyPressKeys));
-
-  // Updating the display
-  const setDisplay = control => {
-    setDisplayText(control);
-  };
-
-  function playSound(soundIndex) {
-    // Play the sound
-    soundMain.soundBank[soundIndex].sound.play();
-    // Update the display
-    setDisplay(soundMain.soundBank[soundIndex].name);
-  }
-
-  // Button clicks
-  const handleClick = e => {
-    const soundIndex = parseInt(e.currentTarget.dataset.drumIndex, 10);
-    playSound(soundIndex);
-  };
-
   // Get index value from key
-
   function getIndexFromEvent(e) {
     const key = e.key.toUpperCase();
     let index;
@@ -197,31 +133,68 @@ function DrumMachine() {
     return index;
   }
 
+  useEffect(() => {
+    // Adding key index to keydown array, if it hasn't been added
+    document.addEventListener('keydown', event => {
+      setKeyPressKeys(prevState => {
+        const keyIndex = getIndexFromEvent(event);
+        const stateArr = [...prevState];
+        if (!stateArr.includes(keyIndex) && keyIndex !== undefined) {
+          stateArr.push(keyIndex);
+        }
+        return stateArr;
+      });
+      // Adding key to be played
+      setKeyPressValue(getIndexFromEvent(event));
+    });
+
+    // Remove key index from keydown array, if it exists
+    document.addEventListener('keyup', event => {
+      setKeyPressKeys(prevState => {
+        const keyIndex = getIndexFromEvent(event);
+        const stateArr = [...prevState];
+        if (keyIndex !== undefined) {
+          const filteredArr = stateArr.filter(key => {
+            if (key !== keyIndex) {
+              return key;
+            }
+          });
+          return filteredArr;
+        }
+        return stateArr;
+      });
+      // Clearing key to be played
+      setKeyPressValue('');
+    });
+  }, []);
+
+  useEffect(() => {
+    if (keyPressValue !== '') {
+      handleKeyDown(keyPressValue);
+    }
+  }, [keyPressValue]);
+
+  // Updating the display
+  const setDisplay = control => {
+    setDisplayText(control);
+  };
+
+  function playSound(soundIndex) {
+    // Play the sound
+    soundMain.soundBank[soundIndex].sound.play();
+    // Update the display
+    setDisplay(soundMain.soundBank[soundIndex].name);
+  }
+
+  // Button clicks
+  const handleClick = e => {
+    const soundIndex = parseInt(e.currentTarget.dataset.drumIndex, 10);
+    playSound(soundIndex);
+  };
+
   // Key presses
-  function handleKeyDown(e) {
+  function handleKeyDown() {
     if (soundMain.soundsLoaded === true) {
-      /* const key = e.key.toUpperCase();
-      if (key === 'Q') {
-        playSound(0);
-      } else if (key === 'W') {
-        playSound(1);
-      } else if (key === 'E') {
-        playSound(2);
-      } else if (key === 'A') {
-        playSound(3);
-      } else if (key === 'S') {
-        playSound(4);
-      } else if (key === 'D') {
-        playSound(5);
-      } else if (key === 'Z') {
-        playSound(6);
-      } else if (key === 'X') {
-        playSound(7);
-      } else if (key === 'C') {
-        playSound(8);
-      } */
-      console.log('KEY PRESS:');
-      console.log(keyPressValue);
       playSound(keyPressValue);
     }
   }
@@ -230,7 +203,7 @@ function DrumMachine() {
   async function importSounds() {
     if (soundMain.soundsLoaded === false) {
       try {
-        const sb = await import('../../Static/soundbank1');
+        const sb = await import('../../Static/soundbank0');
         setSoundMain(prevState => {
           return {
             ...prevState,
@@ -247,7 +220,6 @@ function DrumMachine() {
   }
 
   async function loadSounds(index) {
-    console.log('Loading sounds');
     importSounds();
   }
 
@@ -266,7 +238,9 @@ function DrumMachine() {
                   data-drum-index={index}
                   id={`drumpad${index}`}
                   onClick={handleClick}
-                  className={keyPressValue === index ? 'btn-test' : null}
+                  className={
+                    keyPressKeys.includes(index) ? 'btn-trigger' : null
+                  }
                 >
                   {key}
                 </DrumButton>

@@ -12,6 +12,7 @@ code {
     monospace;
 }
 
-.btn-test {
-  background: green !important;
+.btn-trigger {
+  background: rgb(0, 243, 0) !important;
+  box-shadow: 0px 0px 23px -1px rgba(0, 255, 17, 1) !important;
 }

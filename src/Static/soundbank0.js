@@ -1,14 +1,14 @@
 import { Howl } from 'howler';
 
-import Sound0 from '../Assets/Sounds/set1/kick.wav';
-import Sound1 from '../Assets/Sounds/set1/snare.wav';
-import Sound2 from '../Assets/Sounds/set1/hh.wav';
-import Sound3 from '../Assets/Sounds/set1/fx.wav';
-import Sound4 from '../Assets/Sounds/set1/brass1.wav';
-import Sound5 from '../Assets/Sounds/set1/brass2.wav';
-import Sound6 from '../Assets/Sounds/set1/melody1.wav';
-import Sound7 from '../Assets/Sounds/set1/melody2.wav';
-import Sound8 from '../Assets/Sounds/set1/glock.wav';
+import Sound0 from '../Assets/Sounds/set0/kick.wav';
+import Sound1 from '../Assets/Sounds/set0/snare.wav';
+import Sound2 from '../Assets/Sounds/set0/hh.wav';
+import Sound3 from '../Assets/Sounds/set0/crash.mp3';
+import Sound4 from '../Assets/Sounds/set0/bass1.mp3';
+import Sound5 from '../Assets/Sounds/set0/chord1.mp3';
+import Sound6 from '../Assets/Sounds/set0/chord1.mp3';
+import Sound7 from '../Assets/Sounds/set0/chord1.mp3';
+import Sound8 from '../Assets/Sounds/set0/fx.mp3';
 
 const soundBank = [
   {
