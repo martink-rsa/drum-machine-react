@@ -65,6 +65,9 @@ const DrumButton = withStyles({
     boxShadow: 'none',
     textTransform: 'none',
     fontSize: 16,
+    // padding: '6px 12px',
+    // border: '1px solid',
+    // lineHeight: 1.5,
     backgroundColor: '#007bff',
     borderColor: '#007bff',
     fontFamily: [
@@ -137,14 +140,12 @@ function DrumMachine() {
   ];
 
   useEffect(() => {
-    document.addEventListener('keydown', event =>
-      setKeyPressValue(getIndexFromKey(event)),
-    );
-    document.addEventListener('keyup', () => setKeyPressValue(''));
+    document.addEventListener('keypress', event => setKeyPressValue(event));
+    // document.addEventListener('ontouchstart', event => setKeyPressValue(event));
   }, []);
 
   useEffect(() => {
-    if (keyPressValue !== '') {
+    if (keyPressValue) {
       handleKeyDown(keyPressValue);
     }
   }, [keyPressValue]);
@@ -170,59 +171,42 @@ function DrumMachine() {
     playSound(soundIndex);
   };
 
-  // Get index value from key
-
-  function getIndexFromKey(e) {
-    const key = e.key.toUpperCase();
-    let index;
-    if (key === 'Q') {
-      index = 0;
-    } else if (key === 'W') {
-      index = 1;
-    } else if (key === 'E') {
-      index = 2;
-    } else if (key === 'A') {
-      index = 3;
-    } else if (key === 'S') {
-      index = 4;
-    } else if (key === 'D') {
-      index = 5;
-    } else if (key === 'Z') {
-      index = 6;
-    } else if (key === 'X') {
-      index = 7;
-    } else if (key === 'C') {
-      index = 8;
-    }
-    return index;
-  }
-
   // Key presses
   function handleKeyDown(e) {
-    if (soundMain.soundsLoaded === true) {
-      /* const key = e.key.toUpperCase();
+    console.log(e);
+    /* btnRef0.current.click();
+    btnRef0.current.focus(); */
+    if (soundMain.soundsLoaded) {
+      const key = e.key.toUpperCase();
+      // btnRef0.click();
       if (key === 'Q') {
-        playSound(0);
+        btnRef0.current.click();
+        btnRef0.current.focus();
       } else if (key === 'W') {
-        playSound(1);
+        btnRef1.current.click();
+        btnRef1.current.focus();
       } else if (key === 'E') {
-        playSound(2);
+        btnRef2.current.click();
+        btnRef2.current.focus();
       } else if (key === 'A') {
-        playSound(3);
+        btnRef3.current.click();
+        btnRef3.current.focus();
       } else if (key === 'S') {
-        playSound(4);
+        btnRef4.current.click();
+        btnRef4.current.focus();
       } else if (key === 'D') {
-        playSound(5);
+        btnRef5.current.click();
+        btnRef5.current.focus();
       } else if (key === 'Z') {
-        playSound(6);
+        btnRef6.current.click();
+        btnRef6.current.focus();
       } else if (key === 'X') {
-        playSound(7);
+        btnRef7.current.click();
+        btnRef7.current.focus();
       } else if (key === 'C') {
-        playSound(8);
-      } */
-      console.log('KEY PRESS:');
-      console.log(keyPressValue);
-      playSound(keyPressValue);
+        btnRef8.current.click();
+        btnRef8.current.focus();
+      }
     }
   }
 
@@ -247,10 +231,12 @@ function DrumMachine() {
   }
 
   async function loadSounds(index) {
-    console.log('Loading sounds');
+    console.log('loading sounds');
     importSounds();
   }
 
+  const btnClasses = ['', '', 'btn-test', '', 'btn-test', '', '', '', ''];
+  let inputFile = '';
   return (
     <Container maxWidth="sm">
       <Box my={4} className={classes.mainContainer}>
@@ -267,7 +253,7 @@ function DrumMachine() {
                   id={`drumpad${index}`}
                   onClick={handleClick}
                   ref={refBtnArray[index]}
-                  className={keyPressValue === index ? 'btn-test' : null}
+                  className={btnClasses[index]}
                 >
                   {key}
                 </DrumButton>
