@@ -113,57 +113,36 @@ function DrumMachine() {
   //    removed whenever the key was lifted
 
   useEffect(() => {
+    // Adding key index to keydown array, if it hasn't been added
     document.addEventListener('keydown', event =>
       setKeyPressKeys(prevState => {
         const keyIndex = getIndexFromEvent(event);
-        const newArr = [...prevState];
-        if (!newArr.includes(keyIndex) && keyIndex !== undefined) {
-          newArr.push(keyIndex);
+        const stateArr = [...prevState];
+        if (!stateArr.includes(keyIndex) && keyIndex !== undefined) {
+          stateArr.push(keyIndex);
         }
-        return newArr;
+        return stateArr;
+      }),
+    );
+
+    // Remove key index from keydown array, if it exists
+    document.addEventListener('keyup', event =>
+      setKeyPressKeys(prevState => {
+        const keyIndex = getIndexFromEvent(event);
+        const stateArr = [...prevState];
+        if (keyIndex !== undefined) {
+          const filteredArr = stateArr.filter(key => {
+            if (key !== keyIndex) {
+              console.log(key);
+              return key;
+            }
+          });
+          return filteredArr;
+        }
+        return stateArr;
       }),
     );
   }, []);
-  /* document.addEventListener(
-      'keydown',
-      function(event) {
-        const keyIndex = getIndexFromEvent(event);
-        if (!keyPressKeys.includes(keyIndex))
-          setKeyPressKeys(prevState => {
-            const newArr = [...prevState];
-            newArr.push(keyIndex);
-            return newArr;
-          });
-      }, */
-  /* setKeyPressKeys(prevState => {
-        const newArr = [...prevState];
-        newArr.push(getIndexFromEvent(event));
-        return newArr;
-      }), */
-  /* document.addEventListener('keyup', event =>
-      setKeyPressKeys(prevState => {
-        console.log(event);
-
-        const newArr = [...prevState];
-        const newArr2 = newArr.map(key => {
-          if (key !== 0) {
-            return key;
-          }
-        });
-      }),
-    ); */
-
-  // document.addEventListener('keyup', () => setKeyPressKeys(''));
-
-  /*  useEffect(() => {
-    document.addEventListener('keypress', event =>
-      setKeyPressValue(getIndexFromKey(event)),
-    );
-    document.addEventListener('keydown', event =>
-      setKeyPressValue(getIndexFromKey(event)),
-    );
-    document.addEventListener('keyup', () => setKeyPressValue(''));
-  }, []); */
 
   useEffect(() => {
     if (keyPressValue !== '') {
@@ -183,8 +162,6 @@ function DrumMachine() {
     soundMain.soundBank[soundIndex].sound.play();
     // Update the display
     setDisplay(soundMain.soundBank[soundIndex].name);
-    // Trigger the button classes
-    // refBtnArray[soundIndex].classList.add('btn-test');
   }
 
   // Button clicks
