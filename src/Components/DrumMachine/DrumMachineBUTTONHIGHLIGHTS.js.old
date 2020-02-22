@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, createRef } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Loading from '../Loading/Loading';
 import Display from '../Display/Display';
 
 const useStyles = makeStyles(() => ({
@@ -98,6 +99,7 @@ function DrumMachine() {
   const classes = useStyles();
 
   const [keyPressValue, setKeyPressValue] = useState('');
+  const [keyPressKeys, setKeyPressKeys] = useState([]);
   const [displayText, setDisplayText] = useState('');
   const [soundMain, setSoundMain] = useState({
     soundsLoaded: false,
@@ -108,7 +110,6 @@ function DrumMachine() {
   // Get index value from key
   function getIndexFromEvent(e) {
     const key = e.key.toUpperCase();
-    console.log(key);
     let index;
     if (key === 'Q') {
       index = 0;
@@ -133,10 +134,38 @@ function DrumMachine() {
   }
 
   useEffect(() => {
-    document.addEventListener('keydown', event =>
-      setKeyPressValue(getIndexFromEvent(event)),
-    );
-    document.addEventListener('keyup', () => setKeyPressValue(''));
+    // Adding key index to keydown array, if it hasn't been added
+    document.addEventListener('keydown', event => {
+      setKeyPressKeys(prevState => {
+        const keyIndex = getIndexFromEvent(event);
+        const stateArr = [...prevState];
+        if (!stateArr.includes(keyIndex) && keyIndex !== undefined) {
+          stateArr.push(keyIndex);
+        }
+        return stateArr;
+      });
+      // Adding key to be played
+      setKeyPressValue(getIndexFromEvent(event));
+    });
+
+    // Remove key index from keydown array, if it exists
+    document.addEventListener('keyup', event => {
+      setKeyPressKeys(prevState => {
+        const keyIndex = getIndexFromEvent(event);
+        const stateArr = [...prevState];
+        if (keyIndex !== undefined) {
+          const filteredArr = stateArr.filter(key => {
+            if (key !== keyIndex) {
+              return key;
+            }
+          });
+          return filteredArr;
+        }
+        return stateArr;
+      });
+      // Clearing key to be played
+      setKeyPressValue('');
+    });
   }, []);
 
   useEffect(() => {
@@ -151,29 +180,16 @@ function DrumMachine() {
   };
 
   function playSound(soundIndex) {
-    if (soundIndex >= 0 && soundIndex <= 9) {
-      // Get the choke if it exists
-      const chokeGroup = soundMain.soundBank[soundIndex].choke;
-
-      const sounds = soundMain.soundBank;
-      for (let i = 0; i < sounds.length; i += 1) {
-        if (sounds[i].choke === chokeGroup && sounds[i].choke !== -1) {
-          sounds[i].sound.stop();
-        }
-      }
-      // Play the sound
-      soundMain.soundBank[soundIndex].sound.play();
-      // Update the display
-      setDisplay(soundMain.soundBank[soundIndex].name);
-    }
+    // Play the sound
+    soundMain.soundBank[soundIndex].sound.play();
+    // Update the display
+    setDisplay(soundMain.soundBank[soundIndex].name);
   }
 
   // Button clicks
   const handleClick = e => {
-    if (soundMain.soundsLoaded === true) {
-      const soundIndex = parseInt(e.currentTarget.dataset.drumIndex, 10);
-      playSound(soundIndex);
-    }
+    const soundIndex = parseInt(e.currentTarget.dataset.drumIndex, 10);
+    playSound(soundIndex);
   };
 
   // Key presses
@@ -189,13 +205,13 @@ function DrumMachine() {
       try {
         const sb = await import('../../Static/soundbank0');
         setSoundMain(prevState => {
-          const newState = { ...prevState };
           return {
-            ...newState,
+            ...prevState,
             soundBank: sb.default,
             soundsLoaded: true,
           };
         });
+        // return sb;
       } catch (error) {
         console.log(error);
         console.log('import failed');
@@ -203,7 +219,7 @@ function DrumMachine() {
     }
   }
 
-  function loadSounds() {
+  async function loadSounds(index) {
     importSounds();
   }
 
@@ -212,22 +228,27 @@ function DrumMachine() {
       <Box my={4} className={classes.mainContainer}>
         <Paper id="drum-machine" className={classes.drumMachineContainer}>
           <Display text={displayText} />
-          <div className={classes.drumPadsContainer}>
-            {controlKeys.map((key, index) => (
-              <DrumButton
-                key={`dpad-${Math.random() * 9999}`}
-                data-drum-index={index}
-                id={`drumpad${index}`}
-                onClick={handleClick}
-              >
-                {key}
-              </DrumButton>
-            ))}
-          </div>
+          {soundMain.soundsLoaded === false ? (
+            <Loading />
+          ) : (
+            <div className={classes.drumPadsContainer}>
+              {controlKeys.map((key, index) => (
+                <DrumButton
+                  key={`dpad-${Math.random() * 9999}`}
+                  data-drum-index={index}
+                  id={`drumpad${index}`}
+                  onClick={handleClick}
+                  className={
+                    keyPressKeys.includes(index) ? 'btn-trigger' : null
+                  }
+                >
+                  {key}
+                </DrumButton>
+              ))}
+            </div>
+          )}
         </Paper>
-        <Button variant="contained" onClick={() => loadSounds(0)}>
-          Load Sounds
-        </Button>
+        <Button onClick={() => loadSounds(0)}>Load Sounds 0</Button>
       </Box>
     </Container>
   );
